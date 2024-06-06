@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagination</title>
+    <!-- SCRIPT LINKS -->
+    <script src="./jquery/jquery-3.6.0.min.js"></script>
+    <script src="./js/paginate.js"></script>
+</head>
+
+<body class="p-4 bg-gray-200">
+    <div class="flex flex-col gap-3" id="container"></div>
+
+    <div class="flex gap-3 mt-5">
+        <button class="px-5 py-4 text-white bg-green-800 rounded-lg disabled:bg-slate-500" id="prev-btn">
+        Prev
+      </button>
+        <button class="px-5 py-4 text-white bg-green-800 rounded-lg disabled:bg-slate-500" id="next-btn">
+        Next
+      </button>
+    </div>
+
+    <script>
+        let totalPage = 0;
+        let currentPage = 1;
+        const container = $("#container");
+
+        const data = [
+            "Content 1",
+            "Content 2",
+            "Content 3",
+            "Content 4",
+            "Content 5",
+            "Content 6",
+            "Content 7",
+            "Content 8",
+            "Content 9",
+            "Content 10",
+            "Content 11",
+            "Content 12",
+            "Content 13",
+            "Content 14",
+            "Content 15",
+            "Content 16",
+            "Content 17",
+            "Content 18",
+            "Content 19",
+            "Content 20",
+        ];
+
+        function pagination(currentPage) {
+            paginate({
+                data, // Data to paginate
+                perPage: 5, // Number of items per page
+                currentPage, // Current page
+                response: function(newData, pagination) {
+                    container.html("");
+                    totalPage = pagination;
+
+                    newData.map((item) => {
+                        let div = $(document.createElement("div"))
+                            .addClass("bg-white p-3 rounded-md")
+                            .html(item);
+
+                        container.append(div);
+                    });
+                },
+            });
+        }
+
+        pagination(1);
+        let nextBtn = $("#next-btn");
+        let prevBtn = $("#prev-btn");
+        prevBtn.attr("disabled", true);
+
+        /* Next Button */
+        nextBtn.click(() => {
+            currentPage++;
+            pagination(currentPage);
+            prevBtn.attr("disabled", false);
+
+            if (currentPage >= totalPage) nextBtn.attr("disabled", true);
+            else nextBtn.attr("disabled", false);
+        });
+
+        /* Prev Button */
+        prevBtn.click(() => {
+            currentPage--;
+            pagination(currentPage);
+            nextBtn.attr("disabled", false);
+
+            if (currentPage <= 1) prevBtn.attr("disabled", true);
+            else prevBtn.attr("disabled", false);
+        });
+    </script>
+</body>
+
+</html>
